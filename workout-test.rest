@@ -1,0 +1,66 @@
+# Fitness API test using rest extention
+# Get, Post, Put, Delete
+
+# @name Get all workouts
+GET http://localhost:8080/workouts
+###
+
+# @name Get a workout by ID
+GET http://localhost:8080/workouts/6706a3548fb3dffffb8e97dc
+###
+
+# @name Post a workout
+POST http://localhost:8080/workouts
+Content-Type: application/json
+
+{
+    "title": "Upper workout",
+    "date": "09-04-2024",
+    "exercises": [
+        {
+            "name": "Bench Press",
+            "sets": 4,
+            "reps": 10,
+            "weight": 135
+        },
+        {
+            "name": "Squats",
+            "sets": 4,
+            "reps": 10,
+            "weight": 225
+        }
+    ],
+    "duration": 60,
+    "rest_time": 30,
+    "caloriesBurned": 200
+}
+###
+
+# @name Update a workout
+PUT http://localhost:8080/workouts/6706a3548fb3dffffb8e97dd
+Content-Type: application/json
+
+{
+    "date": "2020-10-17",
+    "exercises": [
+        {
+            "name": "Push Up",
+            "sets": 3,
+            "reps": 20,
+            "weight": 260
+        },
+        {
+            "name": "Sit ups",
+            "sets": 4,
+            "reps": 30,
+            "weight": 260
+        }
+    ],
+    "duration": 60,
+    "caloriesBurned": 200
+}
+###
+
+# @name Delete a workout
+DELETE http://localhost:8080/workouts/6706a5adff26751d5cc3c967
+###
