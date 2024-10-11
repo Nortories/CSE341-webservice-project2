@@ -5,18 +5,18 @@ const app = express();
 const cors = require('cors');
 const port = process.env.PORT || 4000
 
-// TODO: move to own dirs
-// const swaggerJsdoc = require('swagger-jsdoc');
-// const swaggerUi = require('swagger-ui-express');
-// const swaggerDocs = swaggerJsdoc(swaggerOptions);
 
-// Set EJS as the view engine
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.set('view engine', 'ejs');
-app.use('/', require('./routes'));
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
+
+app
+    .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+    .use(cors())
+    .use(express.json())
+    .use(express.urlencoded({ extended: true }))
+    .set('view engine', 'ejs')
+    .use('/', require('./routes'));
+
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, { dbName: process.env.MONGO_DB })
