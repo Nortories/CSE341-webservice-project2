@@ -124,7 +124,7 @@ router.post('/', async (req, res) => {
  *         description: The workout ID.
  *     requestBody:
  *       required: true
- *       content:
+  *       content:
  *         application/json:
  *           schema:
  *             type: object
@@ -137,7 +137,16 @@ router.post('/', async (req, res) => {
  *               exercises:
  *                 type: array
  *                 items:
- *                   type: string
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     sets:
+ *                       type: number    # Changed from string to number
+ *                     reps:
+ *                       type: number    # Changed from string to number
+ *                     weight:
+ *                       type: number    # Changed from string to number
  *               duration:
  *                 type: number
  *               rest_time:
