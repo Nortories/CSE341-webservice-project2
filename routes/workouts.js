@@ -1,4 +1,5 @@
 const express = require('express');
+const { requiresAuth } = require('express-openid-connect');
 const Workouts = require('../controllers/workouts');
 const router = express.Router();
 /**
@@ -90,9 +91,12 @@ router.get('/:id', async (req, res) => {
  *         description: Workout created successfully.
  *       400:
  *         description: Invalid input.
+ *       401:
+ *         description: Unauthorized
  */
 
 router.post('/', async (req, res) => {
+    if(req.oidc.isAuthenticated()){
     const workout = new Workouts({
         title: req.body.title,
         date: req.body.date,
@@ -106,6 +110,9 @@ router.post('/', async (req, res) => {
         res.status(201).json(newWorkout);
     } catch (e) {
         res.status(400).json({ message: e.message });
+    }}
+    else{
+        res.status(401).json({message: 'Unauthorized'});
     }
 });
 
@@ -158,6 +165,8 @@ router.post('/', async (req, res) => {
  *         description: Workout updated successfully.
  *       400:
  *         description: Invalid input.
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: Workout not found.
  */
@@ -178,11 +187,16 @@ router.patch('/:id', async (req, res) => {
     if (req.body.caloriesBurned) {
         workout.caloriesBurned = req.body.caloriesBurned;
     }
+    if(req.oidc.isAuthenticated()){
     try {
         const updatedWorkout = await workout.save();
         res.status(200).json(updatedWorkout);
     } catch (e) {
         res.status(400).json({ message: e.message });
+    }
+}
+    else{
+        res.status(401).json({message: 'Unauthorized'});
     }
 });
 
@@ -202,12 +216,15 @@ router.patch('/:id', async (req, res) => {
  *     responses:
  *       200:
  *         description: Workout deleted successfully.
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: Workout not found.
  *       500:
  *         description: Internal server error.
  */
 router.delete('/:id', async (req, res) => {
+    if(req.oidc.isAuthenticated()){
     try {
         const workout = await Workouts.findByIdAndDelete(req.params.id);
         if (!workout) {
@@ -217,6 +234,11 @@ router.delete('/:id', async (req, res) => {
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
+
+}
+else{
+    res.status(401).json({message: 'Unauthorized'});
+}
 });
 
 module.exports = router;
